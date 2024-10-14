@@ -10,9 +10,10 @@ const UsernameQuerySchema = z.object({
 export async function GET(request: Request) {
   dbConnect();
   try {
+    // console.log("inside check-username-unique controller......!!!!!!!");
     const { searchParams } = new URL(request.url);
-    console.log(request.url);
-    console.log(searchParams);
+    // console.log(request.url);
+    // console.log(searchParams);
     const queryParams = {
       username: searchParams.get("username"),
     };
@@ -34,6 +35,7 @@ export async function GET(request: Request) {
     }
 
     const { username } = result.data;
+    console.log(username);
 
     const existingVerifiedUser = await UserModel.findOne({
       username,

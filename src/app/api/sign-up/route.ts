@@ -5,7 +5,7 @@ import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 
 export async function POST(request: Request) {
   await dbConnect();
-
+  // console.log("inside signup controller....................");
   try {
     const { username, email, password } = await request.json();
 
@@ -38,12 +38,25 @@ export async function POST(request: Request) {
         );
       } else {
         const hashedPassword = await bcrypt.hash(password, 10);
+        existingUserByEmail.username = username;
         existingUserByEmail.password = hashedPassword;
         existingUserByEmail.verifyCode = verifyCode;
         existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
         await existingUserByEmail.save();
       }
     } else {
+      const isNotUniqueUserName = await UserModel.findOne({ username });
+      if (isNotUniqueUserName) {
+        return Response.json(
+          {
+            message: "UserName is not Unique",
+            success: false,
+          },
+          {
+            status: 401,
+          }
+        );
+      }
       const hashedPassword = await bcrypt.hash(password, 10);
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);
@@ -90,7 +103,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
-        message: "Error registering user",
+        message: "Error registering userssss",
       },
       { status: 500 }
     );
