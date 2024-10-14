@@ -24,13 +24,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { messageSchema } from "@/schemas/messageSchema";
 
-const specialChar = "||";
-import error from "next/error";
-import { openaifn } from "@/helpers/openai";
-
-const parseStringMessages = (messageString: string): string[] => {
-  return messageString.split(specialChar);
-};
 type SuggestedMessage = string[]; // or whatever type the messages are
 
 const initialMessageString =
@@ -85,7 +78,7 @@ export default function SendMessage() {
 
   const fetchSuggestedMessages = async () => {
     try {
-      const msg = await openaifn();
+      // const msg = await openaifn();
       // setSuggestMessage(msg);
     } catch (error) {
       console.error("Error fetching messages:", error);
